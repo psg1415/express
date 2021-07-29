@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="/css/error.css">
+{% endblock %}
+
+{% block script %}
+<script src="/js/error.js"></script>
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block nav %}
+{% endblock %}
+
+{% block content %}
+<h1>{{ message }}</h1>
+<h2>{{ status }}</h2>
+<pre>{{ stack }}</pre>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

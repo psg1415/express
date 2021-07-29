@@ -1,0 +1,14 @@
+{
+  "name": "npm_test",
+  "version": "1.0.0",
+  "description": "패키지에 대한 설명",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "작성자명",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

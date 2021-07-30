@@ -5,6 +5,8 @@ const nunjucks = require('nunjucks');
 const path = require('path');
 const logger = require('./lib/logger');
 const multer = require('multer');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 /** multer 설정  */
 const upload = multer({
@@ -37,6 +39,9 @@ const upload = multer({
 /** 라우터 */
 const indexRouter = require('./routes'); // index.js 생략..
 const fileRouter = require('./routes/file');
+const cookieRouter = require('./routes/cookie');
+const sessionRouter = require('./routes/session');
+const memberRouter = require('./routes/member'); /* /member */
 
 const app = express();
 
@@ -51,6 +56,14 @@ nunjucks.configure(path.join(__dirname, 'views'), {
 app.set('PORT', process.env.PORT || 3000);
 
 app.use(morgan('dev'));
+app.use(cookieParser(process.env.COOKIE_SECRET)); //cookieParser(인수 -- cookie 검증 비밀번호)
+app.use(session({
+	resave : false, //같은 값을 저장할때 다시 저장할것인가? false - 저장 안하고 기존꺼 유지
+	saveUninitialized : true, //세션 값 지정 여부 상관 없이 처음부터 session 아이디를 쿠키에 생성 true
+	secret : process.env.COOKIE_SECRET,
+	name : "sessid",
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended : false }));
@@ -58,6 +71,9 @@ app.use(express.urlencoded({ extended : false }));
 /** 라우터 등록 */
 //app.use(indexRouter);
 app.use("/file",fileRouter); // /file/upload, /file/upload2, /file/upload3 ...
+app.use("/cookie", cookieRouter); /* /cookie */
+app.use("/session",sessionRouter); /* /session ... */
+app.use("/member", memberRouter); /* 회원 관련 라우터 */
 
 app.get("/", (req, res) => {
 	return res.render("main/index");

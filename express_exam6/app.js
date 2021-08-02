@@ -7,6 +7,7 @@ const logger = require('./lib/logger');
 const multer = require('multer');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const bootStrap = require('./boot');
 
 /** multer 설정  */
 const upload = multer({
@@ -64,6 +65,8 @@ app.use(session({
 	name : "sessid",
 }));
 
+app.use(bootStrap); //사이트 초기화 미들웨어
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended : false }));
@@ -74,6 +77,7 @@ app.use("/file",fileRouter); // /file/upload, /file/upload2, /file/upload3 ...
 app.use("/cookie", cookieRouter); /* /cookie */
 app.use("/session",sessionRouter); /* /session ... */
 app.use("/member", memberRouter); /* 회원 관련 라우터 */
+
 
 app.get("/", (req, res) => {
 	return res.render("main/index");
@@ -96,7 +100,7 @@ app.post("/upload", upload.single("image"), (req, res) => {
 	return res.send("");
 });
 
-app.post("/upload2",upload.single("images"),(req,res) => {
+app.post("/upload2",upload.array("images"),(req,res) => {
   console.log(req.files); // 여러개인 경우 req.files
   return res.send("");
 });

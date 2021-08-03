@@ -11,6 +11,8 @@ const bootStrap = require('./boot');
 /** 라우터 */
 const indexRouter = require('./routes'); // 메인 페이지 라우터
 const memberRouter = require('./routes/member'); // 회원 관련 라우터
+const scheduleRouter = require('./routes/schedule'); // 스케줄 관련 라우터
+const schedule2Router = require('./routes/schedule2'); // 스케줄 연습 라우터
 
 const app = express();
 
@@ -33,7 +35,7 @@ app.use(session({
 	name : 'yhsession'
 }));
 
-app.use(bootStrap); //사이트 초기화 미들웨어
+app.use(bootStrap); // 사이트 초기화 미들웨어
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
@@ -43,7 +45,8 @@ app.use(express.urlencoded({ extended : false }));
 /** 라우터 등록 */
 app.use(indexRouter);
 app.use("/member", memberRouter);
-
+app.use("/schedule", scheduleRouter);
+app.use("/schedule2", schedule2Router);
 
 /** 없는 페이지 라우터 */
 app.use((req, res, next) => {

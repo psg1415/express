@@ -31,17 +31,17 @@ router.route("/login")
 		})
 		.post(loginValidator, async (req, res) => {
 			const result = await member.login(req.body.memId, req.body.memPw, req);
-      if(result) {
-			return res.redirect("/");
-    }
+			if (result) { // 로그인 성공시 -> 메인페이지로 이동
+				return res.redirect("/");
+			}
 
-    return alert("로그인에 실패",res,true);
+			return alert("로그인에 실패하였습니다", res, true);
 		});
 
-// 로그아웃
+// 로그아웃 /member/logout
 router.get("/logout", (req, res) => {
-  req.session.destory(); //세션 전체비우기 -> 로그아웃 
-  return res.redrect("/"); //로그아웃되면 메인페이지로 이동
+	req.session.destroy(); // 세션 전체 비우기 -> 로그아웃
+	return res.redirect("/"); // 로그아웃 되면 메인페이지로 이동
 });
 
 module.exports = router;

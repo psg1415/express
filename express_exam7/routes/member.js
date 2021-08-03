@@ -29,14 +29,19 @@ router.route("/login")
 		.get((req, res) => {
 			return res.render("member/login");
 		})
-		.post(loginValidator, (req, res) => {
-			member.login(req.body.memId, req.body.memPw, req);
-			return res.send("");
+		.post(loginValidator, async (req, res) => {
+			const result = await member.login(req.body.memId, req.body.memPw, req);
+      if(result) {
+			return res.redirect("/");
+    }
+
+    return alert("로그인에 실패",res,true);
 		});
 
 // 로그아웃
 router.get("/logout", (req, res) => {
-
+  req.session.destory(); //세션 전체비우기 -> 로그아웃 
+  return res.redrect("/"); //로그아웃되면 메인페이지로 이동
 });
 
 module.exports = router;

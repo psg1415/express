@@ -6,11 +6,13 @@ const session = require('express-session');
 const path = require('path');
 const dotenv = require('dotenv');
 const { sequelize } = require("./models");
+const bootStrap = require('./boot');
 
 
 /* 라우터 */
 const indexRouter = require('./routes');
 const memberRouter = require('./routes/member');
+const boardRouter = require('./routes/board');
 
 const app = express();
 
@@ -49,9 +51,12 @@ app.use(session({
   name : "yhsessionid",
 }));
 
+app.use(bootStrap); //사이트 초기화
+
 /* 라우터 등록 */
 app.use(indexRouter);
 app.use("/member", memberRouter);
+app.use("/board",boardRouter);
 
 /** 없는 페이지 처리 라우터 */
 app.use((req, res, next) => {
